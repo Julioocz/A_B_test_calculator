@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>A/B test calculator</title>
+
+    <!-- Semantic UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.9/semantic.min.css">
+
+    {% block CSS %}
+    {% endblock CSS %}
+
+</head>
+<body>
+{% include 'header.html' %}
+
+<div class="ui container">
+{% block content %}
+{% endblock content %}
+</div>
+
+<!-- Scripts -->
+<!-- JQuery -->
+<script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+
+<!-- Semantic JS -->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.9/semantic.min.js"></script>
+
+{% block javascript %}
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="ui segment raised">
+        <form class="ui form" id="ab-test">
+            <div class="field">
+                <label>Number of visitors</label>
+                <div class="two fields">
+                    <div class="field">
+                        <input type="text" name="visitors[control]" placeholder="control"
+                               value="600">
+                    </div>
+                    <div class="field">
+                        <input type="text" name="visitors[variant]" placeholder="variant"
+                               value="700">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Number of conversion</label>
+                    <div class="two fields">
+                        <div class="field">
+                            <input type="text" name="conversions[control]" placeholder="control"
+                                   value="100">
+                        </div>
+                        <div class="field">
+                            <input type="text" name="conversions[variant]" placeholder="variant"
+                                   value="150">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3>P: <span id="significance">--</span></h3>
+            <h3>Significant:<span id="significant">--</span></h3>
+            <div class="ui button" id="submit-ab-test">Calculate significance</div>
+        </form>
+    </div>
+{% endblock content %}
+
+{% block javascript %}
+    <script>
+        console.log($('form#ab-test').serialize());
+        $('#submit-ab-test').click(function () {
+            $.post('/', $('form#ab-test').serialize(), function (data) {
+                $('#significance').text(data.significance);
+                if (data.significant) {
+                    $('#significant').text(' YES!');
+                } else {
+                    $('#significant').text(' NO!');
+                }
+            })
+        })
+    </script>
+{% endblock javascript %}
