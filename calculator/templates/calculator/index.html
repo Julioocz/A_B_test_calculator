@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 {% block CSS %}
-    <link rel="stylesheet" type="text/css" href="{% static  'calculator/css/index.css' %}"/>
+    <style>
+        .calculator {
+            margin-top: 10vh;
+        }
+
+        .calculator-form {
+            margin-top: 5vh;
+        }
+    </style>
 {% endblock CSS %}
 {% block content %}
     <div class="ui container calculator">
