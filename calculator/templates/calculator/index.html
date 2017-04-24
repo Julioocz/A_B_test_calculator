@@ -1,52 +1,77 @@
 {% extends "base.html" %}
+{% load static %}
+{% block CSS %}
+    <link rel="stylesheet" type="text/css" href="{% static  'calculator/css/index.css' %}"/>
+{% endblock CSS %}
 {% block content %}
-    <div class="ui segment raised">
-        <form class="ui form" id="ab-test">
-            <div class="field">
-                <label>Number of visitors</label>
-                <div class="two fields">
-                    <div class="field">
-                        <input type="text" name="visitors[control]" placeholder="control"
-                               value="600">
-                    </div>
-                    <div class="field">
-                        <input type="text" name="visitors[variant]" placeholder="variant"
-                               value="700">
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Number of conversion</label>
-                    <div class="two fields">
-                        <div class="field">
-                            <input type="text" name="conversions[control]" placeholder="control"
-                                   value="100">
+    <div class="ui container calculator">
+        <div class="ui stacked center aligned segment color teal">
+            <h1 class="ui header">A/B Split Test Significance Calculator</h1>
+            <img
+                    class="ui centered small image calculator-image"
+                    src="http://icon-icons.com/icons2/56/PNG/512/meter_calculator_11440.png"
+            />
+            <form class="ui form calculator-form" id="ab-test">
+                {% include 'calculator/error_form.html' %}
+                <div class="ui three column grid">
+
+                    <!-- form field columns headers -->
+                    <div class="row">
+                        <div class="column"></div>
+                        <div class="column">
+                            <h3 class="ui header">Control version</h3>
                         </div>
-                        <div class="field">
-                            <input type="text" name="conversions[variant]" placeholder="variant"
-                                   value="150">
+                        <div class="column">
+                            <h3 class="ui header">Variant version</h3>
                         </div>
                     </div>
+                    {% include 'calculator/grid_row.html' with field_label='number of visitors' field_name='visitors' default_control=600 default_variant=700 %}
+                    {% include 'calculator/grid_row.html' with field_label='number of conversions' field_name='conversions' default_control=100 default_variant=150 %}
                 </div>
-            </div>
-            <h3>P: <span id="significance">--</span></h3>
-            <h3>Significant:<span id="significant">--</span></h3>
-            <div class="ui button" id="submit-ab-test">Calculate significance</div>
-        </form>
+
+
+                <h3>P: <span id="significance">--</span></h3>
+                <h3>Significant:<span id="significant">--</span></h3>
+                <div class="ui button" id="submit-ab-test">Calculate significance</div>
+
+            </form>
+        </div>
     </div>
 {% endblock content %}
 
 {% block javascript %}
     <script>
-        console.log($('form#ab-test').serialize());
-        $('#submit-ab-test').click(function () {
-            $.post('/', $('form#ab-test').serialize(), function (data) {
-                $('#significance').text(data.significance);
-                if (data.significant) {
-                    $('#significant').text(' YES!');
-                } else {
-                    $('#significant').text(' NO!');
-                }
+
+        // Error closing
+        $('.message .close')
+            .on('click', function () {
+                $('form#ab-test').removeClass('error')
             })
+        ;
+
+        // Request managment
+        function successRequest(data) {
+            console.log(data);
+            $('#significance').text(data.significance);
+            if (data.significant) {
+                $('#significant').text(' YES!');
+            } else {
+                $('#significant').text(' NO!');
+            }
+        }
+
+        function failedRequest(data) {
+            $('form#ab-test').addClass('error')
+        }
+
+        $('#submit-ab-test').click(function () {
+
+            $.ajax('/', {
+                type: 'POST',
+                data: $('form#ab-test').serialize(),
+                success: successRequest,
+                error: failedRequest
+            });
         })
     </script>
 {% endblock javascript %}
