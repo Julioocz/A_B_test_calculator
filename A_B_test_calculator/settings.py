@@ -25,7 +25,7 @@ SECRET_KEY = 'sl8^hydun=3q!h3f6mh3*e6+t%*^c)*1ggj1#_c%y$xfsr&$2s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['a-b-test-calculator.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -119,6 +119,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 # Calculator app

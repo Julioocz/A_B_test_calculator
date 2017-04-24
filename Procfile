@@ -1,0 +1,1 @@
+web: gunicorn A_B_test_calculator.wsgi
