@@ -24,14 +24,34 @@ def index(request):
         return render(request, 'calculator/index.html')
 
     elif request.method == 'POST':
-        visitors_control = float(request.POST['visitors[control]'])
-        visitors_variant = float(request.POST['visitors[variant]'])
-        conversions_control = float(request.POST['conversions[control]'])
-        conversions_variant = float(request.POST['conversions[variant]'])
 
-        significance = ab_calculator.significance(visitors_control, conversions_control,
-                                                  visitors_variant, conversions_variant)
+        # Getting the experiment parameters
+        try:
+            visitors_control = float(request.POST['visitors[control]'])
+            visitors_variant = float(request.POST['visitors[variant]'])
+            conversions_control = float(request.POST['conversions[control]'])
+            conversions_variant = float(request.POST['conversions[variant]'])
 
+        except KeyError:
+            return JsonResponse({'message': 'There are missing parameters on the request.'},
+                                status=400)
+
+        # Processing the parameters
+        try:
+            # The ab_calculator raises an ValueError if the input doesn't meet the requirements
+            significance = ab_calculator.significance(visitors_control, conversions_control,
+                                                      visitors_variant, conversions_variant)
+
+        except ValueError:
+            return JsonResponse(
+                {'message': 'An error was raised. Check that the visitors for '
+                            'any version are bigger than the number of '
+                            'conversions'},
+                status=400
+            )
+
+        # The significance must be less than the max significance level to be considered
+        # significant.
         if significance < settings.MAX_SIGNIFICANCE_LEVEL:
             significant = True
 

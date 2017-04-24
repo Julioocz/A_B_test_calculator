@@ -37,6 +37,11 @@ def significance(size_a, successes_a, size_b, successes_b):
     :param successes_b: Successes of the experiment b
     :return: The significance of the test.
     """
+    # Raising an error if the condition of size_sample > successes is not met.
+    if size_a < successes_a or size_b < successes_b:
+        raise ValueError('The size numbers must be greater than the number of successes for an '
+                         'experiment')
+
     p_a = successes_a / size_a
     p_b = successes_b / size_b
     se_a = standard_error(size_a, successes_a)
